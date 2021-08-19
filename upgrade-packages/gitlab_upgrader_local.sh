@@ -9,6 +9,15 @@ set -o pipefail
 sd=''
 [ `id -u` -eq 0 ] || sd='sudo'
 
+# required commands
+for i in curl jq
+do
+	which $i > /dev/null || {
+		echo "Please install command '$i'" >&2
+		exit 1
+	}
+done
+
 # return factored version from gitlab version string
 function get_factored_version 
 {
