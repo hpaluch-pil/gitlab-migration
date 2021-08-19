@@ -58,6 +58,8 @@ do
 		echo "Unable to read '$deb' file" >&2; exit 1
 	}
 	echo "Simulating Upgrade"
+	# use this for install from repository:
+	# $sd apt-get -s install "gitlab-ce=$wanted_ver"
 	set -x
 	$sd apt-get -s install "$deb"
 	set +x
@@ -65,6 +67,8 @@ do
 	echo -n "Should really install $wanted_ver of gitlab-ce [y/N]? "
 	read ans
 	[ "x$ans" = "xy" ] || { echo "Aborting" >&2; exit 1; }
+	# use this for install from repository:
+	# $sd apt-get install "gitlab-ce=$wanted_ver"
 	set -x
 	$sd apt-get install "$deb"
 	$sd apt-mark hold gitlab-ce || true
