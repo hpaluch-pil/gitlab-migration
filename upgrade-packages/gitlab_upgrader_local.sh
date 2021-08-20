@@ -47,6 +47,22 @@ function get_installed_ver
 	gitlab_ver=$(dpkg -s gitlab-ce | egrep '^Version:' | awk '{print $2}')
 	get_factored_version "$gitlab_ver"
 }
+
+yellow="$(tput setaf 3)"
+white="$(tput setaf 7)"
+
+declare -A warnings
+warnings[12.0.12-ce.0]="If your GitLab CE database contains leftovers
+from EE edition - the database migration may cresh.
+Plase see:
+- https://gitlab.com/gitlab-org/gitlab-foss/-/issues/66277#note_205812949
+for possible workaround"
+warnings[13.0.14-ce.0]="GitLab 13.x now uses hashed path of git repositories.
+After upgrade please use these commands:
+- to check legacy projects: $sd sudo gitlab-rake gitlab:storage:list_legacy_projects
+- to migrate legacy projects: $sd gitlab-rake gitlab:storage:migrate_to_hashed"
+warnings[13.12.10-ce.0]="After upgrade you should remove legacy Service Templates using GitLab Web UI"
+
 for i in  11.11.8-ce.0 \
         12.0.12-ce.0 12.1.17-ce.0 12.10.14-ce.0 \
 	13.0.14-ce.0 13.1.11-ce.0 13.12.10-ce.0 \
@@ -73,6 +89,12 @@ do
 	$sd apt-get -s install "$deb"
 	set +x
 	echo "End of simulation"
+	[ -z "${warnings[$i]}" ] || {
+		echo "$yellow"
+		echo "UPGRADE WARNING:"
+		echo "${warnings[$i]}"
+		echo "$white"
+	}
 	echo -n "Should really install $wanted_ver of gitlab-ce [y/N]? "
 	read ans
 	[ "x$ans" = "xy" ] || { echo "Aborting" >&2; exit 1; }
