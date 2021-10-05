@@ -31,5 +31,24 @@ curl -fsS "$BASE_URL/-/readiness" >/dev/null  || {
 	exit 1
 }
 echo
+sd=''
+[ `id -u` -eq 0 ] || sd="sudo "
+
+echo "Checking if migration is complete..."
+jobs_count=999
+while [ $jobs_count -gt 0 ]
+do
+        date
+        set -x
+        jobs_count=$($sd  gitlab-rails runner -e production 'puts Gitlab::BackgroundMigration.remaining')
+        set +x
+        [[ $jobs_count =~ ^[0-9]+$ ]] || {
+                echo "Unexpected job count '$jobs_count' - must be integer" >&2
+                exit 1
+        }
+        echo "INFO: There are remaining $jobs_count jobs"
+        [ $jobs_count -eq 0 ] || sleep 60
+done
+echo
 echo "OK: GitLab is ready"
 exit 0
