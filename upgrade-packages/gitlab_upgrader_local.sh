@@ -128,7 +128,7 @@ do
 		fi
 	done
 	echo
-	[ $wanted_fp_ver -lt 130000 ] || {
+	[ $wanted_fp_ver -lt 121014 ] || {
 		jobs_count=9999
 		while [ "x$jobs_count" != "x0" ]
 		do
