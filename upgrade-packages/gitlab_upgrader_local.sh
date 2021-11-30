@@ -66,7 +66,7 @@ Also please remove legacy Service Templates after upgrade"
 for i in  11.11.8-ce.0 \
         12.0.12-ce.0 12.1.17-ce.0 12.10.14-ce.0 \
 	13.0.14-ce.0 13.1.11-ce.0 13.12.15-ce.0 \
-	14.0.7-ce.0 14.1.3-ce.0
+	14.0.12-ce.0 14.1.3-ce.0
 do
 	# avoid runing 'read' in subshell (thus losing variables)
 	shopt -s lastpipe
