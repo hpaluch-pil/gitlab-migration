@@ -35,6 +35,15 @@ sd=''
 [ `id -u` -eq 0 ] || sd="sudo "
 
 echo "Checking if migration is complete..."
+log=`mktemp`
+trap "rm -f -- $log" EXIT
+set -x
+$sd gitlab-psql -c 'select job_class_name, table_name, column_name, job_arguments from batched_background_migrations where status <> 3' | tee $log
+set +x
+fgrep -q '(0 rows)' $log || {
+	echo "Error - migration is not complete - must return (0 rows)" >&2
+	exit 1
+}
 jobs_count=999
 while [ $jobs_count -gt 0 ]
 do
