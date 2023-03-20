@@ -8,6 +8,6 @@ sd=''
 
 set -x
 $sd gitlab-rake gitlab:backup:create \
-    SKIP=repositories,uploads,builds,artifacts,lfs,registry,pages
+    SKIP=repositories,uploads,builds,artifacts,lfs,terraform_state,ci_secure_files,registry,pages,packages
 exit 0
 
