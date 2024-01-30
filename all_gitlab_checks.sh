@@ -5,6 +5,7 @@ sd=''
 set -x
 cd /
 $sd gitlab-ctl check-config
+$sd gitlab-rake gitlab:env:info
 $sd gitlab-rake gitlab:check
 $sd time gitlab-rake gitlab:git:fsck
 $sd gitlab-rake gitlab:artifacts:check
