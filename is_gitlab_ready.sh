@@ -24,8 +24,8 @@ trap "rm -f -- $log" EXIT
 
 gitlab_web_ready ()
 {
-	echo "Waiting for GitLab Web to be ready... - up to 180s"
-	for s in `seq 1 18`
+	echo "Waiting for GitLab Web to be ready... - up to 300s"
+	for s in `seq 1 30`
 	do
 		date
 		if curl -fsS "$BASE_URL/-/readiness" | jq ;then
@@ -38,7 +38,8 @@ gitlab_web_ready ()
 		echo "Timeout - GitLab still not ready" >&2
 		exit 1
 	}
-	echo "OK"
+	echo -n "OK: "
+	awk '{print "System Uptime (s): " $1}' /proc/uptime
 }
 
 gitlab_bg_migration_completed ()
