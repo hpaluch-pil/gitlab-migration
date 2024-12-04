@@ -5,6 +5,10 @@
 set -e
 set -o pipefail
 
+# BASE_URL below will work even for external_url with *https*, but you have to enable redirect
+# in /etc/gitlab/gitlab.rb commenting out: nginx['redirect_http_to_https'] = true
+# followed by: gitlab-ctl reconfigure
+# It will still enable *http* health checks on 127.0.0.1:80 while redirecting anything else to https
 BASE_URL=http://localhost
 
 # required commands
