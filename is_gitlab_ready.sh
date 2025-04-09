@@ -50,7 +50,7 @@ gitlab_bg_migration_completed ()
 {
 	echo "Checking if Background migration is complete..."
 	set -x
-	$sd gitlab-psql -c 'select job_class_name, table_name, column_name, job_arguments from batched_background_migrations where status not in (3,6)' | tee $log
+	$sd gitlab-psql -c 'select job_class_name, table_name, column_name, job_arguments,started_at from batched_background_migrations where status not in (3,6)' | tee $log
 	set +x
 	fgrep -q '(0 rows)' $log || {
 		echo "Error - migration is not complete - must return (0 rows)" >&2
