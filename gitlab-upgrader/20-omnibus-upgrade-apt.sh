@@ -1,5 +1,5 @@
 #!/bin/bash
-# 20-omnibus-upgrade.sh - upgrade just GitLab package (Omnibus)
+# 20-omnibus-upgrade-apt.sh - upgrade just GitLab package (Omnibus) - for APT distributions
 # should be done only after ./10-os-updates-apt.sh
 set -euo pipefail
 
