@@ -45,6 +45,8 @@ wait_cpu_down ()
 
 # optional command to wrap proxy access, using ${var:-} to avoid undefined variable error (set -u)
 PROXY_WRAPPER="${PROXY_WRAPPER:-}"
+# optional: override next GitLab Version + 1 (specify "18.1" to install "18.0.x")
+GL_NEXT_VERSION_PLUS1="${GL_NEXT_VERSION_PLUS1:-}"
 
 # verify that 10-os-updates-zypper.sh finished OS updates:
 fos=$OS_STATE_DIR/$TS-20-finished
@@ -98,6 +100,8 @@ echo "INFO: GitLab normalized version: '$gl_ver_normalized'"
 # n=next + 1 gitlab version in zypper form : 17.8
 # NOTE: We add +2 because we will define exclusion version rule for zypper
 gln=$gl_major.$(( gl_minor + 2 ))
+# allow override via environment variable
+[ -z "$GL_NEXT_VERSION_PLUS1" ] || gln="$GL_NEXT_VERSION_PLUS1"
 echo "INFO: Next+1 GitLab version: '$gln'"
 [[ $gln =~ ^([0-9]+)\.([0-9]+)$ ]] || {
 	echo "GitLab next+1 ver; '$gln' has unexpected format (should be like 17.8.*" >&2
