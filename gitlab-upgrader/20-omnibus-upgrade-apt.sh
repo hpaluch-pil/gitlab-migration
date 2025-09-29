@@ -22,6 +22,9 @@ verbose_command ()
 	"$@"
 }
 
+# optional: override next GitLab Version (specify "18.0.*" to install "18.0.x")
+GL_NEXT_VERSION="${GL_NEXT_VERSION:-}"
+
 # verify that 10-os-updates-apt.sh finished OS updates:
 fos=$OS_STATE_DIR/$TS-20-finished
 [ -f "$fos" ] || {
@@ -70,8 +73,9 @@ gl_ver_normalized=$(( gl_major * 10000 + gl_minor * 100 + gl_patch ))
 echo "INFO: GitLab normalized version: '$gl_ver_normalized'"
 
 # n=next gitlab version in apt form : 17.8.'*'
-# TODO: make it customizable
 gln=$gl_major.$(( gl_minor + 1 )).'*'
+# allow override via environment variable
+[ -z "$GL_NEXT_VERSION" ] || gln="$GL_NEXT_VERSION"
 echo "INFO: Next GitLab version: '$gln'"
 [[ $gln =~ ^([0-9]+)\.([0-9]+)\.\*$ ]] || {
 	echo "GitLab next ver; '$gln' has unexpected format (should be like 17.8.*" >&2
